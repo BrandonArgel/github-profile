@@ -97,8 +97,8 @@ export const Charts: React.FC<ChartsProps> = ({ languages, repositories }) => {
 	}, [languages, repositories]);
 
 	return (
-		<Grid container rowSpacing={3} columnSpacing={{ xs: 2, sm: 3 }} padding={{ xs: 2, sm: 3 }} sx={{
-			marginTop: 1,
+		<Grid container rowSpacing={3} columnSpacing={{ xs: 2, sm: 3 }} sx={{
+			marginTop: 2,
 		}}>
 			<Chart title={"Top Languages"} data={languageData} config={languageConfig} />
 			<Chart title={"Most Starred"} data={starsData} config={starsConfig} />

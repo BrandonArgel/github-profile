@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 	chart: {
 		marginTop: "2rem",
-		filter: theme.palette.mode === "dark" ? "brightness(1.5) saturate(1.5) contrast(1.5)" : "",
+		filter: theme.palette.mode === "dark" ? "brightness(1.25) saturate(1.25) contrast(1.25)" : "",
 	},
 	text: {},
 	canvas: {},

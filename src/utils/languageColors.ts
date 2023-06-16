@@ -197,4 +197,5 @@ export const languageColors = {
   'AGS Script': '#B9D9FF',
   Dogescript: '#cca760',
   nesC: '#94B0C7',
+  Others: '#cccccc',
 };

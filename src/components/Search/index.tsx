@@ -9,7 +9,7 @@ type SearchProps = {
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onClick: () => void;
 	placeHolder?: string;
-	error?: string;
+	error?: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -74,6 +74,7 @@ export const Search: React.FC<SearchProps> = ({
 		<Stack direction="row" spacing={2} className={classes.root}>
 			<TextField
 				autoFocus
+				autoComplete="off"
 				className={classes.textField}
 				label={placeHolder}
 				fullWidth

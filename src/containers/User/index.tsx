@@ -12,7 +12,7 @@ import { Theme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import { UserModel } from "@models";
 
-type UserCardProps = {
+type UserProps = {
 	user: UserModel;
 };
 
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
-export const UserCard: React.FC<UserCardProps> = ({ user }): JSX.Element => {
+export const User: React.FC<UserProps> = ({ user }): JSX.Element => {
 	const {
 		avatar_url,
 		bio,
@@ -86,7 +86,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }): JSX.Element => {
 
 	return (
 		<Grid container rowSpacing={3} columnSpacing={{ xs: 2, sm: 3 }}>
-			<Grid item xs={12} sm={3} md={2} lg={1} className={classes.avatarContainer}>
+			<Grid item xs={12} sm={3} className={classes.avatarContainer}>
 				{avatar_url && (
 					<CardMedia
 						component="img"
@@ -98,7 +98,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }): JSX.Element => {
 					/>
 				)}
 			</Grid>
-			<Grid item xs={12} sm={9} md={10} lg={11}>
+			<Grid item xs={12} sm={9}>
 				<Stack spacing={1}>
 					{name && (
 						<Typography variant="h2" className={classes.title}>
@@ -169,7 +169,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }): JSX.Element => {
 										Gists
 									</Typography>
 									<Typography variant="body1" className={classes.number}>
-										{public_gists.toLocaleString()}
+										{public_gists.toLocaleString() ?? 0}
 									</Typography>
 								</Stack>
 							</Paper>

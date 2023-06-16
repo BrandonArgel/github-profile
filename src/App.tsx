@@ -3,35 +3,31 @@ import GhPolyglot from "gh-polyglot";
 import { Container, Paper } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Octokit } from "@octokit/core";
-import { Charts, UserCard } from "@containers";
+import { Charts, Repos, User, NotFound, RateLimit } from "@containers";
 import { Header, Search, SEO, Spinner } from "@components";
 import { BASE_URL } from "@constants";
-import { LanguageModel, UserModel, RepositoryModel } from "@models";
-import { mockLanguageData, mockUserData, mockRepoData } from "@utils";
+import { LanguageModel, RateLimitUserModel, RepositoryModel, UserModel } from "@models";
+import { errorMessages } from "@utils";
+// import { mockLanguageData, mockUserData, mockRepoData } from "@utils";
 
-/**
- * TODO:
- * 1. Implement user card. ✅
- * 2. Create context for theme. ✅
- * 3. Implement charts.
- * 3.1 Create chart component.
- * 4. Implement repositories list.
- * 5. Implement user profile.
- **/
+const DEFAULT_USER = "octocat";
 
 function App() {
 	const { VITE_GITHUB_TOKEN } = import.meta.env;
 	const octokit = new Octokit({ auth: VITE_GITHUB_TOKEN, baseUrl: BASE_URL });
 	const theme = useTheme();
-	const [inputUser, setInputUser] = React.useState<string>("octocat");
+	const [inputUser, setInputUser] = React.useState<string>("");
+	const [searchUser, setSearchUser] = React.useState<string>("");
 	const [user, setUser] = React.useState<UserModel | null>(null);
 	const [languages, setLanguages] = React.useState<LanguageModel[] | null>(null);
 	const [repositories, setRepositories] = React.useState<RepositoryModel[]>([]);
-	const [loading, setLoading] = React.useState<boolean>(false);
-	const [error, setError] = React.useState({ message: "", type: 200 });
+	const [rateLimit, setRateLimit] = React.useState<RateLimitUserModel | null>(null);
+	const [chartsRateLimit, setChartsRateLimit] = React.useState<RateLimitUserModel | null>(null);
+	const [loading, setLoading] = React.useState<boolean>(true);
+	const [httpCode, setHttpCode] = React.useState<keyof typeof errorMessages>(200);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (error.message) setError({ message: "", type: 200 });
+		if (httpCode !== 200) setHttpCode(200);
 		setInputUser(e.target.value);
 	};
 
@@ -48,11 +44,7 @@ function App() {
 
 	const getUserLanguages = async () => {
 		const me = new GhPolyglot(`${inputUser}`);
-		await me.userStats((err: any, stats: any) => {
-			if (err) {
-				setError({ message: err.message, type: 500 });
-			}
-
+		await me.userStats((_, stats: any) => {
 			setLanguages(stats);
 		});
 	};
@@ -68,25 +60,99 @@ function App() {
 		setRepositories(data);
 	};
 
+	const getRateLimit = async () => {
+		const { data } = await octokit.request("GET /rate_limit", {
+			headers: {
+				"X-GitHub-Api-Version": "2022-11-28",
+			},
+		});
+
+		const _rateLimit: RateLimitUserModel = {
+			limit: data.rate.limit,
+			remaining: data.rate.remaining,
+			reset: data.rate.reset,
+		};
+
+		setRateLimit(_rateLimit);
+	};
+
+	const getChartsRateLimit = async () => {
+		await fetch("https://api.github.com/rate_limit")
+			.then((res) => res.json())
+			.then((data) => {
+				const _rateChartsLimit: RateLimitUserModel = {
+					limit: data.rate.limit,
+					remaining: data.rate.remaining,
+					reset: data.rate.reset,
+				};
+
+				setChartsRateLimit(_rateChartsLimit);
+			});
+	};
+
+	const init = () => {
+		const params = new URLSearchParams(window.location.search);
+		const user = params.get("user");
+
+		if (user) {
+			setSearchUser(user);
+			setInputUser(user);
+		} else {
+			setSearchUser(DEFAULT_USER);
+			setInputUser(DEFAULT_USER);
+		}
+	};
+
+	const setUserFromQueryParams = () => {
+		const params = new URLSearchParams(window.location.search);
+		params.set("user", inputUser);
+		window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
+	};
+
 	const handleSearch = () => {
+		if (!searchUser) return;
 		setLoading(true);
+		setHttpCode(200);
+		setUserFromQueryParams();
 
-		// Promise.all([getUser(), getUserLanguages(), getUserRepositories()]).finally(() => {
+		Promise.all([
+			getUser(),
+			getUserLanguages(),
+			getUserRepositories(),
+			getRateLimit(),
+			getChartsRateLimit(),
+		])
+			.catch((err) => {
+				if (err.status) {
+					setHttpCode(err.status);
+				} else {
+					setHttpCode(500);
+				}
+
+				setLoading(false);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+
+		// setLanguages(mockLanguageData);
+		// setUser(mockUserData);
+		// setRepositories(mockRepoData);
+
+		// setTimeout(() => {
 		// 	setLoading(false);
-		// });
-
-		setLanguages(mockLanguageData);
-		setUser(mockUserData);
-		setRepositories(mockRepoData);
-
-		setTimeout(() => {
-			setLoading(false);
-		}, 1000);
+		// }, 1000);
 	};
 
 	React.useEffect(() => {
+		init();
+	}, []);
+
+	React.useEffect(() => {
 		handleSearch();
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [searchUser]); // eslint-disable-line react-hooks/exhaustive-deps
+
+	const error = httpCode !== 200;
 
 	return (
 		<Container
@@ -95,7 +161,7 @@ function App() {
 				backgroundColor: theme.palette.background.default,
 				color: theme.palette.text.primary,
 				minHeight: "100vh",
-				padding: "2rem",
+				padding: "2rem 0",
 			}}
 		>
 			<SEO
@@ -109,7 +175,7 @@ function App() {
 					onClick={handleSearch}
 					onChange={handleChange}
 					placeHolder="Github User"
-					error={error.message}
+					error={error}
 				/>
 				<Paper
 					sx={{
@@ -120,12 +186,24 @@ function App() {
 					}}
 				>
 					{loading && <Spinner />}
-					{!loading && error && <p style={{ color: theme.palette.error.main }}>{error.message}</p>}
-					{!loading && user && <UserCard user={user} />}
-					{!loading && languages && repositories && (
-						<Charts languages={languages} repositories={repositories} />
+					{!loading && (
+						<>
+							{error && <NotFound type={httpCode} />}
+							{!error && (
+								<>
+									{user && <User user={user} />}
+									{rateLimit && (
+										<RateLimit rateLimit={rateLimit} chartRateLimit={chartsRateLimit} />
+									)}
+									{languages && repositories && (
+										<Charts languages={languages} repositories={repositories} />
+									)}
+								</>
+							)}
+						</>
 					)}
 				</Paper>
+				{!loading && !error && repositories && <Repos repositories={repositories} />}
 			</Container>
 		</Container>
 	);

@@ -3,6 +3,7 @@ export { mockUserData } from "./Mock/User";
 export { mockRepoData } from "./Mock/Repositories";
 export { languageColors } from "./languageColors";
 export { buildChartConfig } from "./buildChartConfig";
+export { errorMessages } from "./errorMessages";
 export const backgroundColor = [
   'rgba(255, 99, 132, 0.7)',
   'rgba(54, 162, 235, 0.7)',
