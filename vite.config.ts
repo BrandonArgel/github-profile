@@ -44,9 +44,6 @@ export default defineConfig(({ mode }) => {
         'node-fetch': 'isomorphic-fetch',
       }
     },
-    define: {
-      global: {}
-    }
   }
 
   if (mode === 'development') {
