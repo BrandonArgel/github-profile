@@ -37,7 +37,7 @@ export const RateLimit: React.FC<RateLimitProps> = ({ rateLimit, chartRateLimit 
         marginRight: "auto",
 			}}
 		>
-			<Typography variant="body1" sx={{ display: "flex", alignItems: "center" }}>
+			<Typography variant="body1" sx={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
 				<Info sx={{ color: theme.palette.primary.main, marginRight: "0.5rem" }} />
 				Rate limit: {remaining} / {limit} resets at{" "}
 				{new Date(reset! * 1000 ?? 0).toLocaleTimeString()}

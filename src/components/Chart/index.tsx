@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export const Chart: React.FC<ChartsProps> = ({ data, config, title, size = 350 }) => {
-	const chartId = React.useId();
+	const chartId = `chart-${title}`;
 	const classes = useStyles();
 	const chartError = !(data && data.length > 0);
 

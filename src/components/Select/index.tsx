@@ -16,7 +16,7 @@ type SelectProps = {
 };
 
 export const Select: React.FC<SelectProps> = ({ label, options, value, onChange }) => {
-	const selectId = React.useId();
+	const selectId = `select-${label}`;
 
 	const onSelect = (e: SelectChangeEvent) => {
 		onChange(String(e.target.value));
