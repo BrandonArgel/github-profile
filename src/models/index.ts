@@ -1,2 +1,3 @@
-export type { RepositoryModel, LicenseModel, OwnerModel } from "./repository.model";
+export type { LanguageModel } from "./language.model";
+export type { RepositoryModel } from "./repository.model";
 export type { UserModel } from "./user.model";

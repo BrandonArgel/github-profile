@@ -17,7 +17,6 @@ type UserCardProps = {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-	root: {},
 	avatarContainer: {
 		"&.MuiGrid-item": {
 			display: "flex",
@@ -86,7 +85,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }): JSX.Element => {
 	const classes = useStyles();
 
 	return (
-		<Grid container rowSpacing={3} columnSpacing={{ xs: 2, sm: 3 }} className={classes.root}>
+		<Grid container rowSpacing={3} columnSpacing={{ xs: 2, sm: 3 }}>
 			<Grid item xs={12} sm={3} md={2} lg={1} className={classes.avatarContainer}>
 				{avatar_url && (
 					<CardMedia
