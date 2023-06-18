@@ -2,7 +2,6 @@ import * as React from "react";
 import { Button, Stack, TextField } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import { on } from "events";
 
 type SearchProps = {
 	value: string;
