@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Button, Stack, TextField, IconButton } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import SearchIcon from "@mui/icons-material/Search";
+import { on } from "events";
 
 type SearchProps = {
 	value: string;
@@ -70,6 +70,12 @@ export const Search: React.FC<SearchProps> = ({
 }) => {
 	const classes = useStyles();
 
+	const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			onClick();
+		}
+	};
+
 	return (
 		<Stack direction="row" spacing={2} className={classes.root}>
 			<TextField
@@ -82,13 +88,7 @@ export const Search: React.FC<SearchProps> = ({
 				value={value}
 				onChange={onChange}
 				error={Boolean(error)}
-				InputProps={{
-					endAdornment: (
-						<IconButton disabled={!value} onClick={onClick}>
-							<SearchIcon />
-						</IconButton>
-					),
-				}}
+				onKeyDown={onKeyDown}
 			/>
 			<Button
 				className={classes.button}
