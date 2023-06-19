@@ -115,13 +115,11 @@ function App() {
 		setHttpCode(200);
 		setUserFromQueryParams();
 
-		Promise.all([
-			getUser(),
-			getUserLanguages(),
-			getUserRepositories(),
-			getRateLimit(),
-			getChartsRateLimit(),
-		])
+		Promise.all([getUser(), getUserLanguages(), getUserRepositories()])
+			.then(() => {
+				getRateLimit();
+				getChartsRateLimit();
+			})
 			.catch((err) => {
 				if (err.status) {
 					setHttpCode(err.status);
