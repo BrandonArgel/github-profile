@@ -3,7 +3,7 @@ import { styled, Theme } from "@mui/material/styles";
 import { Box, FormGroup, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useThemeContext } from "@context";
-import github from "@assets/images/github.png";
+import github from "@assets/image/github.png";
 
 const useStyles = makeStyles((theme: Theme) => ({
 	root: {

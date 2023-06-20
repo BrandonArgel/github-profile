@@ -4,7 +4,7 @@ import { Container, Paper } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Octokit } from "@octokit/core";
 import { Charts, Repos, User, NotFound, RateLimit } from "@containers";
-import { Header, Search, SEO, Spinner } from "@components";
+import { Footer, Header, Search, SEO, Spinner } from "@components";
 import { BASE_URL } from "@constants";
 import { LanguageModel, RateLimitUserModel, RepositoryModel, UserModel } from "@models";
 import { errorMessages } from "@utils";
@@ -203,6 +203,7 @@ function App() {
 				</Paper>
 				{!loading && !error && repositories && <Repos repositories={repositories} />}
 			</Container>
+			<Footer />
 		</Container>
 	);
 }
