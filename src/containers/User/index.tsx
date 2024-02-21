@@ -82,6 +82,7 @@ export const User: React.FC<UserProps> = ({ user }): JSX.Element => {
 		public_repos,
 		twitter_username,
 	} = user;
+	console.log({public_gists})
 	const classes = useStyles();
 
 	return (
@@ -119,62 +120,54 @@ export const User: React.FC<UserProps> = ({ user }): JSX.Element => {
 			)}
 			<Grid item xs={12}>
 				<Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4 }}>
-					{public_repos && (
-						<Grid item xs={6} sm={3}>
-							<Paper className={classes.paper}>
-								<Stack spacing={1} direction="column">
-									<Typography variant="body1" className={classes.subtitle}>
-										Repositories
-									</Typography>
-									<Typography variant="body1" className={classes.number}>
-										{public_repos}
-									</Typography>
-								</Stack>
-							</Paper>
-						</Grid>
-					)}
-					{followers && (
-						<Grid item xs={6} sm={3}>
-							<Paper className={classes.paper}>
-								<Stack spacing={1} direction="column">
-									<Typography variant="body1" className={classes.subtitle}>
-										Followers
-									</Typography>
-									<Typography variant="body1" className={classes.number}>
-										{followers.toLocaleString()}
-									</Typography>
-								</Stack>
-							</Paper>
-						</Grid>
-					)}
-					{following && (
-						<Grid item xs={6} sm={3}>
-							<Paper className={classes.paper}>
-								<Stack spacing={1} direction="column">
-									<Typography variant="body1" className={classes.subtitle}>
-										Following
-									</Typography>
-									<Typography variant="body1" className={classes.number}>
-										{following.toLocaleString()}
-									</Typography>
-								</Stack>
-							</Paper>
-						</Grid>
-					)}
-					{public_gists && (
-						<Grid item xs={6} sm={3}>
-							<Paper className={classes.paper}>
-								<Stack spacing={1} direction="column">
-									<Typography variant="body1" className={classes.subtitle}>
-										Gists
-									</Typography>
-									<Typography variant="body1" className={classes.number}>
-										{public_gists.toLocaleString() ?? 0}
-									</Typography>
-								</Stack>
-							</Paper>
-						</Grid>
-					)}
+					<Grid item xs={6} sm={3}>
+						<Paper className={classes.paper}>
+							<Stack spacing={1} direction="column">
+								<Typography variant="body1" className={classes.subtitle}>
+									Repositories
+								</Typography>
+								<Typography variant="body1" className={classes.number}>
+									{public_repos}
+								</Typography>
+							</Stack>
+						</Paper>
+					</Grid>
+					<Grid item xs={6} sm={3}>
+						<Paper className={classes.paper}>
+							<Stack spacing={1} direction="column">
+								<Typography variant="body1" className={classes.subtitle}>
+									Followers
+								</Typography>
+								<Typography variant="body1" className={classes.number}>
+									{followers!.toLocaleString()}
+								</Typography>
+							</Stack>
+						</Paper>
+					</Grid>
+					<Grid item xs={6} sm={3}>
+						<Paper className={classes.paper}>
+							<Stack spacing={1} direction="column">
+								<Typography variant="body1" className={classes.subtitle}>
+									Following
+								</Typography>
+								<Typography variant="body1" className={classes.number}>
+									{following!.toLocaleString()}
+								</Typography>
+							</Stack>
+						</Paper>
+					</Grid>
+					<Grid item xs={6} sm={3}>
+						<Paper className={classes.paper}>
+							<Stack spacing={1} direction="column">
+								<Typography variant="body1" className={classes.subtitle}>
+									Gists
+								</Typography>
+								<Typography variant="body1" className={classes.number}>
+									{public_gists!.toLocaleString() ?? 0}
+								</Typography>
+							</Stack>
+						</Paper>
+					</Grid>
 				</Grid>
 			</Grid>
 			<Grid item xs={12}>
